@@ -1,0 +1,53 @@
+plugins {
+    id 'java'
+    id 'org.springframework.boot' version '4.0.0'
+    id 'io.spring.dependency-management' version '1.1.7'
+}
+
+group = 'org.example'
+version = '0.0.1-SNAPSHOT'
+description = 'Mercenary'
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(17)
+    }
+}
+
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.boot:spring-boot-starter-webmvc'
+    compileOnly 'org.projectlombok:lombok'
+    runtimeOnly 'com.mysql:mysql-connector-j'
+    annotationProcessor 'org.projectlombok:lombok'
+    testImplementation 'org.springframework.boot:spring-boot-starter-data-jpa-test'
+    testImplementation 'org.springframework.boot:spring-boot-starter-webmvc-test'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+    // 3. Redis (핵심 기술: 위치 기반 검색 & 캐싱)
+    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+
+    // 4. Redisson (핵심 기술: 동시성 제어/분산 락)
+    // * 중요: 단순 Redis 라이브러리보다 락 구현이 훨씬 쉽고 강력합니다.
+    implementation 'org.redisson:redisson-spring-boot-starter:3.27.0'
+
+    // 5. Validation (입력값 검증)
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+
+    // 6. Swagger (API 문서화 - 프론트 없이 포폴 제출용)
+    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.3.0'
+
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+}
