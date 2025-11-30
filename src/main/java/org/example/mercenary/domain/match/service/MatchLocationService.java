@@ -1,4 +1,4 @@
-package org.example.mercenary.domain.match;
+package org.example.mercenary.domain.match.service;
 
 
 import lombok.RequiredArgsConstructor;
