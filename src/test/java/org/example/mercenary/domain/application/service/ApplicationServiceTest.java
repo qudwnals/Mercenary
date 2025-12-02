@@ -28,7 +28,7 @@ class ApplicationServiceTest {
     private MatchRepository matchRepository;
 
     @Autowired
-    private ApplicationRepository applicationRepository;
+    private ApplicationRepository ApplicationRepository;
 
     @Test
     @DisplayName("Redisson 락: 100명이 동시에 신청해도 정확히 5명만 성공해야 한다.")
