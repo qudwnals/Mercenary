@@ -25,4 +25,9 @@ public class ApiResponseDto<T> {
     public static ApiResponseDto<?> success(String message) {
         return new ApiResponseDto<>(200, message, null);
     }
+
+    //에러 발생 시
+    public static ApiResponseDto<?> error(int code, String message) {
+        return new ApiResponseDto<>(code, message, null);
+    }
 }
