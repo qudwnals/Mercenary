@@ -1,6 +1,7 @@
 package org.example.mercenary.domain.match.entity;
 import jakarta.persistence.*;
 import lombok.*;
+import org.example.mercenary.domain.match.dto.MatchCreateRequestDto;
 
 import java.time.LocalDateTime;
 
@@ -34,4 +35,19 @@ public class MatchEntity {
     public void increasePlayerCount() {
         this.currentPlayerCount++;
     }
+    public static MatchEntity from(MatchCreateRequestDto request) {
+        return MatchEntity.builder()
+                .writerId(request.getWriterId())
+                .city(request.getCity())
+                .district(request.getDistrict())
+                .neighborhood(request.getNeighborhood())
+                .placeName(request.getPlaceName())
+                // String 날짜를 LocalDateTime으로 변환
+                .matchDate(LocalDateTime.parse(request.getMatchDate()))
+                .maxPlayerCount(request.getMaxPlayerCount())
+                .currentPlayerCount(0) // 시작 인원 기본값 0 설정
+                .description(request.getDescription())
+                .build();
+    }
+
 }
