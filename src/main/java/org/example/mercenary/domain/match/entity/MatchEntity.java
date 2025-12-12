@@ -25,6 +25,9 @@ public class MatchEntity {
     private String neighborhood;
     private String placeName;
 
+    private Double latitude;
+    private Double longitude;
+
     // 경기 정보
     private LocalDateTime matchDate;
     private int maxPlayerCount; // 최대 모집 인원
@@ -42,11 +45,12 @@ public class MatchEntity {
                 .district(request.getDistrict())
                 .neighborhood(request.getNeighborhood())
                 .placeName(request.getPlaceName())
-                // String 날짜를 LocalDateTime으로 변환
                 .matchDate(LocalDateTime.parse(request.getMatchDate()))
                 .maxPlayerCount(request.getMaxPlayerCount())
                 .currentPlayerCount(0) // 시작 인원 기본값 0 설정
                 .description(request.getDescription())
+                .latitude(request.getLatitude())
+                .longitude(request.getLongitude())
                 .build();
     }
 

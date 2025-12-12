@@ -20,6 +20,9 @@ public class MatchSearchResponseDto {
     // Redis Geo 검색 시 거리 정보도 함께 받아 사용자에게 보여줍니다.
     private final Double distance; // 사용자 위치에서 경기장까지의 거리 (Km)
 
+    private Double latitude;
+    private Double longitude;
+
     public static MatchSearchResponseDto from(MatchEntity match, Double distance) {
         return MatchSearchResponseDto.builder()
                 .matchId(match.getId())
@@ -30,6 +33,8 @@ public class MatchSearchResponseDto {
                 .currentPlayerCount(match.getCurrentPlayerCount())
                 .description(match.getDescription())
                 .distance(distance)
+                .latitude(match.getLatitude())
+                .longitude(match.getLongitude())
                 .build();
     }
 }
