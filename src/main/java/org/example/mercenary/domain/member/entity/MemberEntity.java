@@ -1,7 +1,10 @@
-package org.example.mercenary.domain.match.entity;
+package org.example.mercenary.domain.member.entity;
 
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Getter
@@ -13,16 +16,18 @@ public class MemberEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // 카카오에서 부여하는 고유 번호 (회원 식별용)
+    // 카카오에서 제공하는 고유 번호 (회원 식별 핵심 키)
     @Column(nullable = false, unique = true)
     private Long kakaoId;
 
+    @Column(unique = true)
     private String email;
 
+    @Column(nullable = false)
     private String nickname;
 
-    // 권한 (USER, ADMIN 등)
     @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private Role role;
 
     @Builder
@@ -30,10 +35,6 @@ public class MemberEntity {
         this.kakaoId = kakaoId;
         this.email = email;
         this.nickname = nickname;
-        this.role = role != null ? role : Role.USER;
-    }
-
-    public enum Role {
-        USER, ADMIN
+        this.role = (role != null) ? role : Role.USER;
     }
 }

@@ -25,6 +25,9 @@ springdoc:
   swagger-ui:
     path: /swagger-ui.html
 
-    jwt:
-      # 최소 32글자 이상의 랜덤한 문자열
-      secret: mercenary_high_project_secret_key_for_jwt_2025_fighting
+jwt:
+   # 최소 32글자 이상의 랜덤한 문자열
+ secret: mercenary_high_project_secret_key_for_jwt_2025_fighting
+
+kakao:
+  client-id: 7d14f9ab2e737ea77a60f2c1bffce860
