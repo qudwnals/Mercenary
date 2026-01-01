@@ -10,7 +10,10 @@ import org.example.mercenary.domain.member.repository.MemberRepository;
 import org.example.mercenary.global.auth.JwtTokenProvider;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.web.reactive.function.client.WebClientResponseException;
 
 @Slf4j
 @Service
@@ -60,23 +63,29 @@ public class AuthService {
 
     private String getKakaoAccessToken(String code) {
         WebClient webClient = WebClient.create("https://kauth.kakao.com");
-        KakaoTokenResponse response = webClient.post()
-                .uri(uriBuilder -> uriBuilder
-                        .path("/oauth/token")
-                        .queryParam("grant_type", "authorization_code")
-                        .queryParam("client_id", clientId)
-                        .queryParam("redirect_uri", "http://localhost:5173/login/callback")
-                        .queryParam("code", code)
-                        .build())
-                .header("Content-type", "application/x-www-form-urlencoded;charset=utf-8")
-                .retrieve()
-                .bodyToMono(KakaoTokenResponse.class)
-                .block();
+        MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
+        params.add("grant_type", "authorization_code");
+        params.add("client_id", clientId);
+        params.add("redirect_uri", "http://localhost:5173/login/callback");
+        params.add("code", code);
+        // params.add("client_secret", "사용중이라면_여기에_키입력");
 
-        if (response == null) {
-            throw new RuntimeException("카카오 토큰을 받아오지 못했습니다.");
+        try {
+            KakaoTokenResponse response = webClient.post()
+                    .uri("/oauth/token")
+                    .header("Content-type", "application/x-www-form-urlencoded;charset=utf-8")
+                    .bodyValue(params)
+                    .retrieve()
+                    .bodyToMono(KakaoTokenResponse.class)
+                    .block();
+
+            return response.getAccessToken();
+
+        } catch (WebClientResponseException e) {
+            // 🔥 여기가 핵심입니다! 카카오가 보낸 진짜 에러 내용을 로그에 찍습니다.
+            log.error(">>>> 카카오 에러 응답(Body): {}", e.getResponseBodyAsString());
+            throw new RuntimeException("카카오 토큰 요청 실패: " + e.getMessage());
         }
-        return response.getAccessToken();
     }
 
     private KakaoUserInfoResponse getKakaoUserInfo(String accessToken) {
