@@ -31,7 +31,6 @@ public class MatchSearchResponseDto {
                 .matchDate(match.getMatchDate())
                 .maxPlayerCount(match.getMaxPlayerCount())
                 .currentPlayerCount(match.getCurrentPlayerCount())
-                .description(match.getDescription())
                 .distance(distance)
                 .latitude(match.getLatitude())
                 .longitude(match.getLongitude())

@@ -1,33 +1,53 @@
 package org.example.mercenary.domain.match.dto;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
-
+@NoArgsConstructor // 기본 생성자 필수
 public class MatchCreateRequestDto {
-    @NotNull private Long writerId; // 주최자 ID
 
-    @NotBlank private String city;
-    @NotBlank private String district;
-    @NotBlank private String neighborhood;
-    @NotBlank private String placeName;
 
-    // Geo 위치 정보 (Redis 동기화에 필수)
-    @NotNull @Min(-90) @Max(90)
+    @NotBlank(message = "제목을 입력해주세요.")
+    private String title;
+
+
+    @NotBlank(message = "내용을 입력해주세요.")
+    private String content;
+
+
+    @NotBlank
+    private String placeName;
+
+    @NotBlank
+    private String district;
+
+    @NotBlank
+    private String fullAddress;
+
+
+    @NotNull
     private Double latitude;
-    @NotNull @Min(-180) @Max(180)
+
+    @NotNull
     private Double longitude;
 
-    @NotNull private String matchDate; // 날짜와 시간 정보 (예: 2025-12-31T18:00:00)
+    //경기 날짜 (String -> LocalDateTime으로 변경, 자동 변환 설정)
+    @NotNull(message = "경기 날짜를 선택해주세요.")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
+    private LocalDateTime matchDate;
 
-    @NotNull @Min(2) @Max(22)
-    private Integer maxPlayerCount; // 최대 인원 (최소 2명, 최대 22명)
-
-    @NotBlank private String description;
-
+    //모집 인원
+    @NotNull
+    @Min(2) @Max(22)
+    private Integer maxPlayerCount;
 }

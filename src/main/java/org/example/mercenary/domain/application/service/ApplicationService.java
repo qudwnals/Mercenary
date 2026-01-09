@@ -22,6 +22,7 @@ public class ApplicationService {
     private final MatchRepository matchRepository;
     private final ApplicationRepository applicationRepository;
 
+    @Transactional
     public void applyMatch(Long matchId, Long userId) {
         String lockKey = "match:" + matchId + ":lock";
         RLock lock = redissonClient.getLock(lockKey);
@@ -55,7 +56,7 @@ public class ApplicationService {
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 경기입니다."));
 
         // B. 중복 신청 검증
-        if (applicationRepository.existsByMatchIdAndUserId(matchId, userId)) {
+        if (applicationRepository.existsByMatchIdAndUserId(match, userId)) {
             throw new IllegalStateException("이미 신청한 경기입니다.");
         }
 

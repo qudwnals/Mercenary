@@ -2,17 +2,20 @@ package org.example.mercenary.domain.match.controller;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.example.mercenary.domain.match.dto.MatchCreateRequestDto;
+import org.example.mercenary.domain.match.dto.MatchSearchRequestDto;
+import org.example.mercenary.domain.match.dto.MatchSearchResponseDto;
 import org.example.mercenary.domain.match.service.MatchService;
 import org.example.mercenary.global.dto.ApiResponseDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
-import org.example.mercenary.domain.match.dto.MatchSearchRequestDto;
-import org.example.mercenary.domain.match.dto.MatchSearchResponseDto;
 
 import java.util.List;
 
+@Slf4j
 @RestController
 @RequestMapping("/api/matches")
 @RequiredArgsConstructor
@@ -21,30 +24,44 @@ public class MatchController {
     private final MatchService matchService;
 
     /**
-     * 매치 생성 API (POST /api/matches)
-     * - DB에 저장 후 Redis Geo에 위치 정보를 등록합니다.
+     * 1. 매치 생성 API (POST)
+     * 🔥 수정됨: UserDetails 대신 Long memberId를 직접 받습니다.
      */
     @PostMapping
     public ResponseEntity<ApiResponseDto<Long>> createMatch(
-            @Valid @RequestBody MatchCreateRequestDto request
+            @Valid @RequestBody MatchCreateRequestDto request,
+            @AuthenticationPrincipal Long memberId //
     ) {
-        Long matchId = matchService.createMatch(request);
+        log.info("매치 생성 요청 - 작성자 ID: {}, 제목: {}", memberId, request.getTitle());
+
+        // 서비스 호출 (ID 변환 과정 없이 바로 넘김)
+        Long matchId = matchService.createMatch(request, memberId);
 
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(ApiResponseDto.success("매치가 성공적으로 생성되었습니다.", matchId));
     }
-    // 2. [핵심] 내 주변 매치 검색 API 추가
+
     /**
-     * 위치 기반 검색 API (GET /api/matches/nearby)
-     * - Redis Geo를 활용하여 고성능 검색을 제공합니다.
+     * 2. 전체 매치 조회 API (GET)
+     * 🔥 추가됨: 프론트엔드 목록(/api/matches) 요청을 처리하기 위해 필요합니다.
+     */
+    @GetMapping
+    public ResponseEntity<ApiResponseDto<List<MatchSearchResponseDto>>> getAllMatches() {
+        // 서비스에 getAllMatches() 메서드가 없다면 만들어주셔야 합니다!
+        // 만약 없다면, 임시로 빈 리스트를 반환하거나 searchNearbyMatches를 활용하세요.
+        List<MatchSearchResponseDto> results = matchService.getAllMatches();
+
+        return ResponseEntity.ok(ApiResponseDto.success("전체 매치 조회 성공", results));
+    }
+
+    /**
+     * 3. 내 주변 매치 검색 API (GET /nearby)
      */
     @GetMapping("/nearby")
     public ResponseEntity<ApiResponseDto<List<MatchSearchResponseDto>>> searchNearbyMatches(
-            // GET 요청이므로, 쿼리 파라미터로 DTO를 받습니다.
-            @Valid MatchSearchRequestDto request
+            @Valid @ModelAttribute MatchSearchRequestDto request
     ) {
         List<MatchSearchResponseDto> results = matchService.searchNearbyMatches(request);
-
         return ResponseEntity.ok(ApiResponseDto.success("주변 매치 검색 성공", results));
     }
 }
