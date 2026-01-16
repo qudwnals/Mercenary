@@ -58,9 +58,20 @@ public class MatchController {
      * 3. 내 주변 매치 검색 API (GET /nearby)
      */
     @GetMapping("/nearby")
-    public ResponseEntity<ApiResponseDto<List<MatchSearchResponseDto>>> searchNearbyMatches(
-            @Valid @ModelAttribute MatchSearchRequestDto request
+    public ResponseEntity<?> searchNearbyMatches( // <--- 반환 타입을 와일드카드(?)로 잠시 변경
+                                                  @Valid @ModelAttribute MatchSearchRequestDto request,
+                                                  org.springframework.validation.BindingResult bindingResult // 👈 에러 잡는 그물망 추가
     ) {
+        // 1. 에러가 있는지 검사
+        if (bindingResult.hasErrors()) {
+            log.error("검색 요청 데이터 오류: {}", bindingResult.getAllErrors());
+            return ResponseEntity.badRequest().body(bindingResult.getAllErrors());
+        }
+
+        // 2. 정상 로직 실행
+        log.info("검색 요청 들어옴: 위도={}, 경도={}, 거리={}",
+                request.getLatitude(), request.getLongitude(), request.getDistance());
+
         List<MatchSearchResponseDto> results = matchService.searchNearbyMatches(request);
         return ResponseEntity.ok(ApiResponseDto.success("주변 매치 검색 성공", results));
     }

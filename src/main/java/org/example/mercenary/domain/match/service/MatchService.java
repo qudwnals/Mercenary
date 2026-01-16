@@ -58,7 +58,7 @@ public class MatchService {
         Map<Long, Double> nearbyMatchData = matchLocationService.findNearbyMatchIds(
                 request.getLongitude(),
                 request.getLatitude(),
-                request.getDistanceKm()
+                request.getDistance()
         );
 
         if (nearbyMatchData.isEmpty()) {

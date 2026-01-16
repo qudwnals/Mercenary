@@ -10,27 +10,37 @@ import java.time.LocalDateTime;
 @Builder
 public class MatchSearchResponseDto {
     private final Long matchId;
+
+    private final String title;
+
+    private final String content;
+
     private final String placeName;
     private final String district;
     private final LocalDateTime matchDate;
     private final Integer maxPlayerCount;
     private final Integer currentPlayerCount;
-    private final String description;
 
-    // Redis Geo 검색 시 거리 정보도 함께 받아 사용자에게 보여줍니다.
-    private final Double distance; // 사용자 위치에서 경기장까지의 거리 (Km)
+    private final String fullAddress; // 주소 정보도 있으면 좋음
 
-    private Double latitude;
-    private Double longitude;
+    // Redis Geo 검색 시 거리 정보
+    private final Double distance;
+
+    private final Double latitude;
+    private final Double longitude;
 
     public static MatchSearchResponseDto from(MatchEntity match, Double distance) {
         return MatchSearchResponseDto.builder()
                 .matchId(match.getId())
+                .title(match.getTitle())
+                .content(match.getContent())
+
                 .placeName(match.getPlaceName())
                 .district(match.getDistrict())
                 .matchDate(match.getMatchDate())
                 .maxPlayerCount(match.getMaxPlayerCount())
                 .currentPlayerCount(match.getCurrentPlayerCount())
+                .fullAddress(match.getFullAddress()) // 주소 추가
                 .distance(distance)
                 .latitude(match.getLatitude())
                 .longitude(match.getLongitude())

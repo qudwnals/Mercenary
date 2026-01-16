@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.example.mercenary.global.auth.JwtAuthenticationFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -42,7 +43,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/auth/**", "/login/**").permitAll()
 
                         // (선택 사항) 매치 목록 조회(GET)도 로그인 없이 보여주고 싶다면 아래 줄 주석 해제
-                        // .requestMatchers(org.springframework.http.HttpMethod.GET, "/api/matches").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/matches/**").permitAll()
 
                         // 나머지 모든 요청은 인증(토큰) 필요
                         .anyRequest().authenticated()
