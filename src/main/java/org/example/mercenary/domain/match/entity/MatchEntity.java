@@ -40,8 +40,10 @@ public class MatchEntity {
     @Column(nullable = false)
     private LocalDateTime matchDate; // 경기 날짜 및 시간
 
+    @Column(nullable = false)
     private int maxPlayerCount; // 최대 인원 (예: 12명)
 
+    @Column(nullable = false)
     private int currentPlayerCount; // 현재 인원 (기본 1명부터 시작)
 
     private double latitude; // 위도 (지도 표시용)
@@ -71,6 +73,7 @@ public class MatchEntity {
                 .district(request.getDistrict())
                 .matchDate(request.getMatchDate())
                 .maxPlayerCount(request.getMaxPlayerCount())
+                .currentPlayerCount(request.getCurrentPlayerCount())
                 .latitude(request.getLatitude())
                 .longitude(request.getLongitude())
                 .fullAddress(request.getFullAddress())

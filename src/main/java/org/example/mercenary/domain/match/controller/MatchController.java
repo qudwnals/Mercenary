@@ -4,6 +4,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.example.mercenary.domain.match.dto.MatchCreateRequestDto;
+import org.example.mercenary.domain.match.dto.MatchDetailResponseDto;
 import org.example.mercenary.domain.match.dto.MatchSearchRequestDto;
 import org.example.mercenary.domain.match.dto.MatchSearchResponseDto;
 import org.example.mercenary.domain.match.service.MatchService;
@@ -74,5 +75,14 @@ public class MatchController {
 
         List<MatchSearchResponseDto> results = matchService.searchNearbyMatches(request);
         return ResponseEntity.ok(ApiResponseDto.success("주변 매치 검색 성공", results));
+    }
+
+
+    @GetMapping("/{matchId}")
+    public ResponseEntity<ApiResponseDto<MatchDetailResponseDto>> getMatchDetail(
+            @PathVariable Long matchId
+    ) {
+        MatchDetailResponseDto response = matchService.getMatchDetail(matchId);
+        return ResponseEntity.ok(ApiResponseDto.success("매치 상세 조회 성공", response));
     }
 }

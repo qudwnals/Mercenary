@@ -2,6 +2,7 @@ package org.example.mercenary.domain.match.service;
 
 import lombok.RequiredArgsConstructor;
 import org.example.mercenary.domain.match.dto.MatchCreateRequestDto;
+import org.example.mercenary.domain.match.dto.MatchDetailResponseDto;
 import org.example.mercenary.domain.match.entity.MatchEntity;
 import org.example.mercenary.domain.match.repository.MatchRepository;
 import org.example.mercenary.domain.match.dto.MatchSearchRequestDto;
@@ -91,5 +92,13 @@ public class MatchService {
         return matches.stream()
                 .map(match -> MatchSearchResponseDto.from(match, 0.0)) // 거리 정보는 없으므로 0.0으로 설정
                 .collect(Collectors.toList());
+    }
+
+    @Transactional(readOnly = true)
+    public MatchDetailResponseDto getMatchDetail(Long matchId) {
+        MatchEntity match = matchRepository.findById(matchId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 매치를 찾을 수 없습니다. id=" + matchId));
+
+        return MatchDetailResponseDto.from(match);
     }
 }

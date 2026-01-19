@@ -43,11 +43,14 @@ public class MatchCreateRequestDto {
 
     //경기 날짜 (String -> LocalDateTime으로 변경, 자동 변환 설정)
     @NotNull(message = "경기 날짜를 선택해주세요.")
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm")
     private LocalDateTime matchDate;
 
     //모집 인원
     @NotNull
     @Min(2) @Max(22)
     private Integer maxPlayerCount;
+
+    @NotNull
+    private Integer currentPlayerCount;
 }
