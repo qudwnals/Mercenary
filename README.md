@@ -148,7 +148,7 @@ GitHub Actions CI가 적용되어 있습니다.
 
 워크플로 파일:
 
-- [`.github/workflows/ci.yml`](/C:/Users/user/Mercenary-Backend-main/.github/workflows/ci.yml)
+- [`.github/workflows/ci.yml`](./.github/workflows/ci.yml)
 
 ## 운영 배포
 
@@ -183,9 +183,9 @@ curl http://localhost:8080/actuator/health
 
 관련 파일:
 
-- [`src/main/resources/application-prod.yml`](/C:/Users/user/Mercenary-Backend-main/src/main/resources/application-prod.yml)
-- [`docker-compose.prod.yml`](/C:/Users/user/Mercenary-Backend-main/docker-compose.prod.yml)
-- [`.env.prod.example`](/C:/Users/user/Mercenary-Backend-main/.env.prod.example)
+- [`src/main/resources/application-prod.yml`](./src/main/resources/application-prod.yml)
+- [`docker-compose.prod.yml`](./docker-compose.prod.yml)
+- [`.env.prod.example`](./.env.prod.example)
 
 ## 인증 응답 규칙
 
@@ -233,3 +233,17 @@ curl http://localhost:8080/actuator/health
 
 - 운영 배포 문서 보강
 - 알림 기능 추가
+
+
+## 프로젝트 역할
+
+1인 개발 프로젝트로 프론트엔드·백엔드·DevOps를 전반적으로 담당했습니다.
+
+- Spring Boot 기반 REST API와 JWT 인증 구현
+- Redis 캐시 및 Redisson 분산 락 적용
+- 경기 신청 동시성 제어와 중복 신청 방지
+- 테스트 프로필·GitHub Actions CI·Docker 운영 구성
+- 부하 테스트를 통한 동시성 정합성 및 성능 검증
+
+- [포트폴리오](https://portfoilo-nine-liard.vercel.app/)
+- [GitHub 조직](https://github.com/Mercenary-Project)
